@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
+use Webpatser\Uuid\Uuid;
+use DB;
+//vpx_imports
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -13,11 +15,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        DB::table('app_data')->insert([
+            'created_at' =>  Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' =>  Carbon::now()->format('Y-m-d H:i:s'),
+
+        ]);
+
+        //vpx_attach
+        DB::table('admin_users')->insert([
+            'uuid' => (string) Uuid::generate(4),
+            'admin_type' => "Super Admin",
+            'name' => "Webmaster",
+            'mobile_number' => "01727572841",
+            'email' => "admin@admin.com",
+            'password' => Hash::make('123456789'),
+            'user_access' => json_encode(['SA']),
+            'created_at' =>  Carbon::now()->format('Y-m-d H:i:s'),
+            'updated_at' =>  Carbon::now()->format('Y-m-d H:i:s'),
         ]);
     }
 }
