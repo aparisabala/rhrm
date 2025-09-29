@@ -9,4 +9,5 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 {!! $appStyles ?? '' !!}
+<link rel="stylesheet" href="/../../lvtwelve/vpx-assets/Js/Lib/px-ajax/dist/px.css"/>
 @include('admin.includes.theme');

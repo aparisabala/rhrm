@@ -1,0 +1,75 @@
+$(document).ready(function(){
+
+    if ($('#frmStoreCompany').length > 0) {
+        let rules = {
+            name: {
+                required: true,
+                maxlength: 253
+            }
+        };
+        PX.ajaxRequest({
+            element: 'frmStoreCompany',
+            validation: true,
+            script: 'admin/company',
+            rules,
+            afterSuccess: {
+                type: 'inflate_reset_response_data',
+            }
+        });
+    }
+
+     if ($('#frmUpdateCompany').length > 0) {
+        let rules = {
+            name: {
+                required: true,
+                maxlength: 253
+            }
+        };
+        PX.ajaxRequest({
+            element: 'frmUpdateCompany',
+            validation: true,
+            script: 'admin/company/'+$("#patch_id").val(),
+            rules,
+            afterSuccess: {
+                type: 'inflate_response_data',
+            }
+        });
+    }
+
+    if ($("#dtCompanyName").length > 0) {
+        let col_draft = [
+            {
+                data: 'id',
+                title: 'ID'
+            },
+            {
+                data: 'name',
+                title: 'Name'
+            },
+
+            {
+                data: 'created_at',
+                title: 'Created At'
+            },
+
+            {
+                data: null,
+                title: 'Actions',
+                class: 'text-end',
+                render: function (data, type, row) {
+                    return `<a href="${baseurl}admin/company/${data.id}/edit"
+                        <span class="badge rounded-pill bg-info cursor-pointer me-2">
+                            <span class="bx bxs-edit text-white fw-bold fs-14"></span>
+                        </span>
+                    </a>`;
+                }
+            },
+        ];
+        PX.renderDataTable('dtCompanyName', {
+            select: true,
+            url: 'admin/company/list',
+            columns: col_draft,
+            pdf: [1, 2]
+        });
+    }
+})
