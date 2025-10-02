@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Validator;
 class CompanyRepository extends BaseRepository implements ICompanyRepository {
 
     use BaseTrait;
-
+    public function __construct() {
+        $this->LoadModels(['Company']);
+    }
     public function index($request,$id=null)
     {
        return $this->getPageDefault(Company::class,$id);
@@ -30,11 +32,72 @@ class CompanyRepository extends BaseRepository implements ICompanyRepository {
         ->make(true);
     }
 
+    public function updateList($request)
+    {
+        $i = Company::whereIn('id',$request->ids)->select(['id','name','serial'])->get();;
+        $dirty = [];
+        if (count($i) > 0) {
+            foreach ($i as $key => $value) {
+                $value->serial = $request->serial[$value->id];
+                if ($value->isDirty()) {
+                    $dirty[$key] = "yes";
+                }
+            }
+            if (count($dirty) > 0) {
+                foreach ($i as $key => $value) {
+                    $value->save();
+                }
+                $data['extraData'] = [
+                    "inflate" => 'Updated successfully'
+                ];
+                return $this->response(['type' => 'success','data' => $data]);
+            } else {
+                return $this->response(['type' => 'noUpdate', 'title' =>  '<span class="text-success"> You made no changes </span>']);
+            }
+
+        } else {
+            return $this->response(['type' => 'noUpdate', 'title' => 'Something went wrong, try again']);
+        }
+    }
+
+    public function deleteList($request)
+    {
+        $errors = [];
+        $i = Company::whereIn('id',$request->ids)->select(['id'])->get();
+        if (count($i) > 0) {
+            // $errors = $this->checkInUse([
+            //     "rows" => $i,
+            //     "search" => ["id","id"],
+            //     "denined" => ["name","name"],
+            //     "targetModel" => [$this->StudentAdmission,$this->ExamResult],
+            //     "targetCol" => ["lib_category_id","lib_category_id"],
+            //     "exists" => ["Class Category","Class Category"],
+            //     "in" => ["Stduent Table","Result Table"]
+            // ]);
+            if (count($errors) > 0) {
+                return $this->response(['type'=>'bigError','errors'=>$errors]);
+            }
+            foreach ($i as $key => $value) {
+                $value->delete();
+            }
+            $data['extraData'] = [
+                "inflate" => "Deleted successfuly",
+                "redirect" => null
+            ];
+            return $this->response(['type' => 'success',"data"=>$data]);
+        } else {
+            return $this->response(['type' => 'noUpdate', 'title' => 'Something went wrong, try again']);
+        }
+    }
+
     public function store($request)
     {
         try {
-            Company::create($request->all());
-            return redirect()->back()->with('success', 'Company created successfully!');
+            Company::create([ ...$request->all(),'serial' => $this->facSrWc($this->Company)]);
+            $response['extraData'] = [
+                'inflate' => 'Action succesfull'
+            ];
+            return $this->response(['type' => 'success', 'data' => $response]);
         } catch (\Exception $e) {
             $this->saveError($this->getSystemError(['name' => 'UqProfession_store_error']), $e);
             return redirect()->back()->with('error', 'Something went wrong');

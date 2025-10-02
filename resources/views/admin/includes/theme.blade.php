@@ -34,4 +34,14 @@ a {
 .rounded-pill {
     padding: 6px;
 }
+.account-pages .logo{
+    width: 320px;
+}
+
+.admin-logo-sm  {
+    width: 38px;
+}
+.admin-logo-lg {
+    width: 90%;
+}
 </style>

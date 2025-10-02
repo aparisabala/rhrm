@@ -22,7 +22,7 @@ class SetBootConfig
         if(!empty($app_data) ) {
             config(['a' => $app_data]);
             config(['i' => [
-                    'service_name' => "Service Name",
+                    'service_name' => "ARHRMS- Human Resource Management System",
                     "service_domain"=> "domain.com",
                     "address"=>"Address",
                     "mobile_number" =>"01XXX0017454",

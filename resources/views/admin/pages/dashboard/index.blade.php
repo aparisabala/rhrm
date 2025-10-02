@@ -8,7 +8,7 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="float-end mt-2">
-						<div id="total-revenue-chart" data-colors="[" --bs-primary"]"=""></div>
+						<div id="total-revenue-chart"></div>
 					</div>
 					<div>
 						<h4 class="mb-1 mt-1">$<span data-plugin="counterup">34,152</span></h4>
@@ -24,7 +24,7 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="float-end mt-2">
-						<div id="orders-chart" data-colors="[" --bs-success"]"=""> </div>
+						<div id="orders-chart"> </div>
 					</div>
 					<div>
 						<h4 class="mb-1 mt-1"><span data-plugin="counterup">5,643</span></h4>
@@ -40,7 +40,7 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="float-end mt-2">
-						<div id="customers-chart" data-colors="[" --bs-primary"]"=""> </div>
+						<div id="customers-chart"> </div>
 					</div>
 					<div>
 						<h4 class="mb-1 mt-1"><span data-plugin="counterup">45,254</span></h4>
@@ -57,7 +57,7 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="float-end mt-2">
-						<div id="growth-chart" data-colors="[" --bs-warning"]"=""></div>
+						<div id="growth-chart"></div>
 					</div>
 					<div>
 						<h4 class="mb-1 mt-1">+ <span data-plugin="counterup">12.58</span>%</h4>

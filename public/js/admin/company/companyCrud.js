@@ -18,7 +18,7 @@ $(document).ready(function(){
         });
     }
 
-     if ($('#frmUpdateCompany').length > 0) {
+    if ($('#frmUpdateCompany').length > 0) {
         let rules = {
             name: {
                 required: true,
@@ -41,6 +41,15 @@ $(document).ready(function(){
             {
                 data: 'id',
                 title: 'ID'
+            },
+            {
+                data: null,
+                title: 'Serial',
+                class: 'text-center',
+                width: '200px',
+                render: function (data, type, row) {
+                    return `<input type="number" value="` + data.serial + `" class="form-control serial"><input type="hidden" value="` + data.id + `" class="form-control ids">`;
+                }
             },
             {
                 data: 'name',
@@ -73,3 +82,40 @@ $(document).ready(function(){
         });
     }
 })
+
+function dtCompanyName(table, api, op) {
+    PX.deleteAll({
+        element: "deleteAllCompanyName",
+        script: "admin/company/delete-list",
+        confirm: true,
+        api,
+    });
+    PX.updateAll({
+        element: "updateAllCompanyName",
+        script: "admin/company/update-list",
+        confirm: true,
+        dataCols: {
+            key: "ids",
+            items: [
+                {
+                    index: 1,
+                    name: "ids",
+                    type: "input",
+                    data: [],
+                },
+                {
+                    index: 1,
+                    name: "serial",
+                    type: "input",
+                    data: []
+                }
+            ]
+        },
+        api,
+        afterSuccess: {
+            type: "inflate_response_data"
+        }
+    });
+    // PX?.dowloadPdf({ ...op, btn: "downloadCompanyNamePdf", dataTable: "yes" })
+    // PX?.dowloadExcel({ ...op, btn: "downloadCompanyNameExcel", dataTable: "yes" })
+}

@@ -5,9 +5,8 @@
 <meta name="_token" content="{{ csrf_token() }}">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title> {!! $tabTitle ?? 'Site Title' !!} </title>
-<link rel="shortcut icon" href="{{ config('i.logo') }}" />
+<link rel="shortcut icon" href="{{ config('i.favicon') }}" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 {!! $appStyles ?? '' !!}
-<link rel="stylesheet" href="/../../lvtwelve/vpx-assets/Js/Lib/px-ajax/dist/px.css"/>
-@include('admin.includes.theme');
+@include('admin.includes.theme')

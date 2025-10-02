@@ -7,7 +7,7 @@ use App\Http\Requests\Admin\Company\Crud\ValidateUpdateCompany;
 use App\Repositories\Admin\Company\Crud\ICompanyRepository;
 use App\Traits\BaseTrait;
 use Illuminate\Http\Request;
-class CompanyController  extends Controller {
+class CompanyCurdController  extends Controller {
 
     use BaseTrait;
     public function __construct(private ICompanyRepository $iCompanyRepo) {
@@ -44,5 +44,17 @@ class CompanyController  extends Controller {
     public function update(Request $request, $id){
         return $this->iCompanyRepo->update($request,$id);
     }
+
+     public function deleteList(Request $request)
+    {
+       return  $this->iCompanyRepo->deleteList($request);
+    }
+
+     public function updateList(Request $request)
+    {
+       return  $this->iCompanyRepo->updateList($request);
+    }
+
+
 
 }

@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use App\Traits\BaseTrait;
 use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
 {
+    use BaseTrait;
     protected $table = "companies";
-    protected $fillable = ['name'];
+    protected $fillable = ['name','serial'];
 
 }

@@ -36,4 +36,3 @@
     </div>
 </div>
 {!! $appScripts ?? '' !!}
-<script src="/../../lvtwelve/vpx-assets/Js/Lib/px-ajax/dist/px.js"></script>
