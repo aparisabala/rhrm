@@ -9,19 +9,34 @@ use App\Traits\BaseTrait;
 use Carbon\Carbon;
 use DataTables;
 use Illuminate\Support\Facades\Validator;
-
-class CompanyRepository extends BaseRepository implements ICompanyRepository {
+use Illuminate\Http\JsonResponse;
+class CompanyCrudRepository extends BaseRepository implements ICompanyCrudRepository {
 
     use BaseTrait;
     public function __construct() {
         $this->LoadModels(['Company']);
     }
-    public function index($request,$id=null)
+
+    /**
+     * Get the page default data
+     *
+     * @param Request $request
+     * @param integer|string $id
+     * @return array
+     */
+    public function index($request,$id=null) : array
     {
-       return $this->getPageDefault(Company::class,$id);
+       return $this->getPageDefault(model: Company::class,id: $id);
     }
 
-    public function list($request)
+
+    /**
+     * Yajra datatbale list resource
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function list($request) : JsonResponse
     {
         $model = Company::query();
         return DataTables::of($model)
@@ -32,7 +47,13 @@ class CompanyRepository extends BaseRepository implements ICompanyRepository {
         ->make(true);
     }
 
-    public function updateList($request)
+    /**
+     *  Bulk update list resource
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function updateList($request) : JsonResponse
     {
         $i = Company::whereIn('id',$request->ids)->select(['id','name','serial'])->get();;
         $dirty = [];
@@ -60,7 +81,13 @@ class CompanyRepository extends BaseRepository implements ICompanyRepository {
         }
     }
 
-    public function deleteList($request)
+    /**
+     * Bulk delete list resource
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deleteList($request) : JsonResponse
     {
         $errors = [];
         $i = Company::whereIn('id',$request->ids)->select(['id'])->get();
@@ -86,27 +113,41 @@ class CompanyRepository extends BaseRepository implements ICompanyRepository {
             ];
             return $this->response(['type' => 'success',"data"=>$data]);
         } else {
+            return $this->response(['type' => 'noUpdate', 'title' => 'No selected data found, try again']);
+        }
+    }
+
+    /**
+     * Store resource
+     *
+     * @param Request  $request
+     * @return JsonResponse
+     */
+    public function store($request) : JsonResponse
+    {
+        try {
+            Company::create([ ...$request->all(),'serial' => $this->facSrWc($this->Company)]);
+            $response['extraData'] = ['inflate' => 'Action succesfull' ];
+            return $this->response(['type' => 'success', 'data' => $response]);
+        } catch (\Exception $e) {
+            $this->saveError($this->getSystemError(['name' => 'UqProfession_store_error']), $e);
             return $this->response(['type' => 'noUpdate', 'title' => 'Something went wrong, try again']);
         }
     }
 
-    public function store($request)
+    /**
+     * Update resource
+     *
+     * @param Requets $request
+     * @param integer|string $id
+     * @return JsonResponse
+     */
+    public function update($request,$id) : JsonResponse
     {
-        try {
-            Company::create([ ...$request->all(),'serial' => $this->facSrWc($this->Company)]);
-            $response['extraData'] = [
-                'inflate' => 'Action succesfull'
-            ];
-            return $this->response(['type' => 'success', 'data' => $response]);
-        } catch (\Exception $e) {
-            $this->saveError($this->getSystemError(['name' => 'UqProfession_store_error']), $e);
-            return redirect()->back()->with('error', 'Something went wrong');
+        $row = Company::find($id);
+        if(empty($row)){
+            return  $this->response(['type' => 'noUpdate', 'title' =>  '<span class="text-danger">Requestd resource not found, try again </span>']);
         }
-    }
-
-    public function update($request,$id)
-    {
-        $row = Company::findOrFail($id);
         $row->fill($request->all());
         if($row->isDirty()){
             $validator = Validator::make($request->all(), (new ValidateUpdateCompany())->rules($request,$row));
