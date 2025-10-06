@@ -29,7 +29,6 @@ return [
                     'boxIcon',
                     'jqConfirm',
                     'datatable5',
-                    'datatableBs5',
                     'dataTableSelectCheckbox',
                     'pdfmake'
                 ],
